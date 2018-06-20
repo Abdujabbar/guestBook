@@ -11,6 +11,10 @@ class Request
     protected $getParams;
     protected $postParams;
     protected $uri;
+
+    /**
+     * Request constructor.
+     */
     public function __construct()
     {
         $this->getParams = $_GET ?? $_GET;
@@ -18,18 +22,51 @@ class Request
         $this->parseURI();
     }
 
-    protected function parseURI() {
-        $this->uri = $_SERVER['REQUEST_URI'] ?? explode("?", $_SERVER['REQUEST_URI'])[0];
+    protected function parseURI()
+    {
+        if (isset($_SERVER['REQUEST_URI']) && strlen($_SERVER['REQUEST_URI']) > 1) {
+            $this->uri = rtrim(explode("?", $_SERVER['REQUEST_URI'])[0], '/');
+        }
+
+        if (empty($this->uri)) {
+            $this->uri = '/';
+        }
     }
 
-    public function getURI() {
+    /**
+     * @return mixed
+     */
+    public function getURI()
+    {
         return $this->uri;
     }
-    public function getParam($name = '') {
+
+    /**
+     * @param string $name
+     * @return mixed
+     */
+    public function getParam(string $name = '')
+    {
         return $this->getParams[$name] ?? $this->getParams[$name];
     }
 
-    public function getPost($name = '') {
+    /**
+     * @param string $name
+     * @return mixed
+     */
+    public function getPost(string $name = '')
+    {
         return $this->postParams[$name] ?? $this->postParams[$name];
+    }
+
+
+    public function isPost()
+    {
+        return $_SERVER['REQUEST_METHOD'] === 'POST';
+    }
+
+    public function isGet()
+    {
+        return $_SERVER['REQUEST_METHOD'] === 'GET';
     }
 }

@@ -20,9 +20,13 @@ class Pagination
     private $itemsPerPage;
     private $currentPage;
     private $containerTag = 'ul';
+    private $containerTagClass = 'pagination';
     private $itemTag = 'li';
+    private $itemATagClass = 'page-link';
     private $itemClass = 'page-item';
-    private $activeItemClass = 'current';
+    private $activeItemClass = 'active';
+    public $previousButtonText = 'Prev';
+    public $nextButtonText = 'Next';
 
     /**
      * Pagination constructor.
@@ -62,7 +66,7 @@ class Pagination
     public function render(): string
     {
         $response = "";
-        $response .= "<{$this->containerTag}>";
+        $response .= "<{$this->containerTag} class='{$this->containerTagClass}'>";
         $response .= $this->renderPreviousArrow();
         for ($i = 1; $i <= $this->pagesCount; $i++) {
             $response .= $this->renderItem($i);
@@ -75,8 +79,8 @@ class Pagination
     public function renderPreviousArrow(): string
     {
         $response = "";
-        if ($this->currentPage >= 1) {
-            $response .= $this->renderItem($this->currentPage, '<');
+        if ($this->currentPage + 1 > 1) {
+            $response .= $this->renderItem($this->currentPage,  $this->previousButtonText);
         }
         return $response;
     }
@@ -85,7 +89,7 @@ class Pagination
     {
         $response = "";
         if ($this->currentPage + 2 <= $this->pagesCount) {
-            $response .= $this->renderItem($this->currentPage + 2, '>');
+            $response .= $this->renderItem($this->currentPage + 2, $this->nextButtonText);
         }
         return $response;
     }
@@ -106,9 +110,8 @@ class Pagination
 
 
         $url = $this->generateItemURL();
-
-        $response = sprintf("<{$this->itemTag} class='%s'><a href='{$url}'>%s</a></{$this->itemTag}>",
-            $itemClass, $this->currentPageParam, $page, $symbol);
+        $response = sprintf("<{$this->itemTag} class='%s'><a href='{$url}' class='%s'>%s</a></{$this->itemTag}>",
+            $itemClass, $this->currentPageParam, $page, $this->itemATagClass,  $symbol);
         return $response;
     }
 
@@ -123,7 +126,7 @@ class Pagination
                 unset($params['page']);
             }
             if(count($params) > 0) {
-                $url = $this->baseURL . '?' . http_build_query($params);
+                $url = $this->baseURL . '?' . urldecode(http_build_query($params));
                 $url .= '&%s=%s';
             } else {
                 $url = "?%s=%s";

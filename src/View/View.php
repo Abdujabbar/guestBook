@@ -10,7 +10,7 @@ class View
 {
     public $layout = "layout";
 
-    public function __construct($layout)
+    public function __construct($layout = 'layout')
     {
         $this->layout = $this->getLayout($layout);
     }

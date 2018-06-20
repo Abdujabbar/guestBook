@@ -7,17 +7,31 @@
  */
 
 
-define('APP_ROOT', __DIR__ . '/../');
-define('SRC_PATH', APP_ROOT . 'src');
-define('TEMPLATE_PATH', SRC_PATH . DIRECTORY_SEPARATOR. 'templates');
-require_once SRC_PATH . DIRECTORY_SEPARATOR . 'bootstrap.php';
+
+require_once __DIR__ . '/../src' . DIRECTORY_SEPARATOR . 'bootstrap.php';
+
+
 
 
 $app = new App();
 
+
 $app->registerEndpoint("/", function(Request $request,  Response $response) {
+    $view = new \View\View();
+    $name = $request->getParam('name') ? $request->getParam('name') : 'Guest';
+    $paginator = new \Pagination\Pagination("http://localhost:8081/", 100, 10);
+    $view->render('index', ['name' => $name, 'paginator' => $paginator]);
+});
+
+$app->registerEndpoint('/create-post', function(Request $request, Response $response) {
+    if(!$request->isPost()) {
+        $response->notAllowedMethod();
+    }
+
 
 });
+
+
 try {
     $app->run();
 } catch (Exception $e) {
