@@ -7,7 +7,7 @@
 #
 # Host: 0.0.0.0 (MySQL 5.6.40)
 # Database: guestBook
-# Generation Time: 2018-06-20 11:10:15 +0000
+# Generation Time: 2018-06-21 11:13:46 +0000
 # ************************************************************
 
 
@@ -35,6 +35,16 @@ CREATE TABLE `posts` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+LOCK TABLES `posts` WRITE;
+/*!40000 ALTER TABLE `posts` DISABLE KEYS */;
+
+INSERT INTO `posts` (`id`, `author`, `title`, `content`, `image`, `created_at`)
+VALUES
+	(4,'abdujabbor@gmail.com','\'1=1','dsad sad sad sa dsa dsa','daryo.jpg',1529578693),
+	(5,'abdujabbor@gmail.com','Some awesome title','<script>alert(1)</script>','daryo_web.jpg',1529578731);
+
+/*!40000 ALTER TABLE `posts` ENABLE KEYS */;
+UNLOCK TABLES;
 
 
 

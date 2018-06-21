@@ -59,6 +59,17 @@ class Request
         return $this->postParams[$name] ?? $this->postParams[$name];
     }
 
+    /**
+     * @return mixed
+     */
+    public function getPostParams() {
+        return $this->postParams;
+    }
+
+    public function getParams() {
+        return $this->getParams;
+    }
+
 
     public function isPost()
     {

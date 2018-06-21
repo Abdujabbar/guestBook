@@ -8,21 +8,21 @@
 
 class PostRepositoryTest extends \PHPUnit\Framework\TestCase
 {
-    public function testSuccess()
+    protected $pdo;
+
+    public function __construct(string $name = null, array $data = [], string $dataName = '')
     {
-        $dbConfigs = \Configs::getInstance()->getByName('db');
-        $pdo = new PDO($dbConfigs['dsn'],
-            $dbConfigs['db_user'],
-            $dbConfigs['db_pass']);
+        parent::__construct($name, $data, $dataName);
+    }
 
-        $postRepository = new \Repository\PostRepository($pdo);
-
+    public function testReadWrite()
+    {
+        $postRepository = new \Repository\PostRepository();
         $post = new Post();
-        $post->author = "abdujabbor1987@gmail.com";
-        $post->title = 'dummy title';
+        $post->author = "'abdujabbor1987@gmail.com";
+        $post->title = "'dummy title";
         $post->content = \Random\RandomGenerator::getInstance()->randomSequence(30);
         $post->image = \Random\RandomGenerator::getInstance()->randomSequence(30);
-        $post->createdAt = time();
 
         $this->assertEquals(true, $postRepository->save($post));
 
@@ -38,4 +38,5 @@ class PostRepositoryTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals(count($storedPosts), count($restStoredPosts));
     }
+
 }

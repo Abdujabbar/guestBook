@@ -112,3 +112,6 @@ composer.phar
 
 
 # End of https://www.gitignore.io/api/composer
+
+
+/public/assets/media

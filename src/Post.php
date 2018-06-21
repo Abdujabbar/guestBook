@@ -22,12 +22,15 @@ class Post
                 $this->$key = $value;
             }
         }
+
+        $this->createdAt = time();
     }
 
     public function validate()
     {
         $this->clearErrors();
 
+        $this->beforeValidate();
         if (!filter_var($this->author, FILTER_VALIDATE_EMAIL)) {
             $this->errors['author'] = 'author field must require email address';
         }
@@ -35,11 +38,30 @@ class Post
         $properties = $reflection->getProperties(ReflectionProperty::IS_PUBLIC);
 
         foreach ($properties as $property) {
-            if (empty($this->{$property->name})) {
+            if (empty($this->{$property->name}) && empty($this->errors[$property->name])) {
                 $this->errors[$property->name] = "{$property->name} field cannot be empty";
             }
         }
+
+        $this->afterValidate();
         return count($this->errors) === 0;
+    }
+
+    public function afterValidate()
+    {
+
+    }
+
+    public function beforeValidate()
+    {
+        if (!empty($_FILES['image']) && $_FILES['image']['name']) {
+            if (!in_array($_FILES['image']['type'], ['image/jpeg', 'image/png'])) {
+                $this->setAttributeError('image', 'image: Available only image/(jpeg|png) files');
+            } else {
+                copy($_FILES['image']['tmp_name'], MEDIA_PATH . DIRECTORY_SEPARATOR . $_FILES['image']['name']);
+                $this->image = $_FILES['image']['name'];
+            }
+        }
     }
 
     public function clearErrors()
@@ -50,5 +72,14 @@ class Post
     public function getErrors()
     {
         return $this->errors;
+    }
+
+    public function getError($attribute = '') {
+        return $this->errors[$attribute] ?? $this->errors[$attribute];
+    }
+
+    public function setAttributeError($name = '', $message = '')
+    {
+        $this->errors[$name] = $message;
     }
 }

@@ -16,6 +16,7 @@ class App
     {
         $this->request = new Request();
         $this->response = new Response();
+        Session::getInstance();
         $this->handlers = [];
     }
 

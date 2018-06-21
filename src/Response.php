@@ -51,4 +51,10 @@ class Response
         echo "Page Not Found";
         die();
     }
+
+
+    public function redirect($address = '') {
+        header('Location:' . $address);
+        exit;
+    }
 }
