@@ -10,11 +10,28 @@ class RandomGenerator
 {
     protected static $_instance;
     public $availableChars = '1234567890qwertyuiopasdfghjklzxcvbnm';
+
+    private function __construct()
+    {
+    }
+
     public static function getInstance() {
         if(!self::$_instance) {
             self::$_instance = new self();
         }
         return self::$_instance;
+    }
+
+
+    public function __wakeup()
+    {
+        // TODO: Implement __wakeup() method.
+    }
+
+
+    public function __clone()
+    {
+        // TODO: Implement __clone() method.
     }
 
     public function randomInt(int $from, int $to) {
