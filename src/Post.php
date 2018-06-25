@@ -26,9 +26,11 @@ class Post
         $this->createdAt = time();
     }
 
-    public function validate()
+    public function validate($clearErrors = true)
     {
-        $this->clearErrors();
+        if($clearErrors) {
+            $this->clearErrors();
+        }
 
         $this->beforeValidate();
         if (!filter_var($this->author, FILTER_VALIDATE_EMAIL)) {

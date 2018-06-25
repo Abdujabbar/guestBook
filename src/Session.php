@@ -9,9 +9,19 @@
 class Session
 {
     public static $instance;
-    public function __construct()
+    private function __construct()
     {
         session_start();
+    }
+
+    private function __clone()
+    {
+        // TODO: Implement __clone() method.
+    }
+
+    private function __wakeup()
+    {
+        // TODO: Implement __wakeup() method.
     }
 
     public static function getInstance() {
